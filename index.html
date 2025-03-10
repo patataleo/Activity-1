@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Registration System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #d3eaad; /* Light green background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container-wrapper {
+            background-color: #eaf5d6;
+            border-radius: 24px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 1000px;
+            padding: 30px;
+            display: flex;
+            overflow: hidden;
+        }
+        
+        .illustration {
+            flex: 1;
+            display: none;
+        }
+        
+        .illustration-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 16px;
+        }
+        @media (min-width: 992px) {
+            .illustration {
+                display: block;
+                background-color: #eaf5d6;
+                border-radius: 16px;
+                margin-right: 20px;
+                position: relative;
+            }
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 16px;
+            padding: 40px;
+            width: 100%;
+            max-width: 420px;
+            margin-left: auto;
+        }
+        
+        .brand {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        .brand-name {
+            color: #333;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        
+        .brand-icon {
+            width: 18px;
+            height: 18px;
+            background-color: #94d66a;
+            margin-right: 8px;
+            border-radius: 2px;
+            transform: rotate(45deg);
+        }
+        
+        .form-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            background-color: #fff;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        .form-control:focus {
+            border-color: #94d66a;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(148, 214, 106, 0.2);
+        }
+        
+        .submit-btn {
+            width: 100%;
+            background-color: #94d66a;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+        
+        .submit-btn:hover {
+            background-color: #86c35f;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+        
+        .success-message {
+            color: #2ecc71;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+        
+        .password-container {
+            position: relative;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #888;
+            font-size: 16px;
+            padding: 4px;
+        }
+        
+        .terms {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .terms a {
+            color: #94d66a;
+            text-decoration: none;
+        }
+        
+        .strength-meter {
+            height: 4px;
+            width: 100%;
+            background-color: #eee;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        
+        .strength-meter-fill {
+            height: 100%;
+            width: 0;
+            border-radius: 4px;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+        
+        .strength-text {
+            font-size: 12px;
+            margin-top: 5px;
+            color: #888;
+        }
+        
+        .strength-weak .strength-meter-fill {
+            background-color: #e74c3c;
+            width: 33.33%;
+        }
+        
+        .strength-medium .strength-meter-fill {
+            background-color: #f39c12;
+            width: 66.66%;
+        }
+        
+        .strength-strong .strength-meter-fill {
+            background-color: #2ecc71;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-wrapper">
+        <div class="illustration">
+            <img src="image.png" alt="Illustration of a person working" class="illustration-image">
+        </div>
+        
+        <div class="container">
+            <div class="brand">
+                <div class="brand-name">
+                    <div class="brand-icon"></div>
+                    Mapanao
+                </div>
+            </div>
+            
+            <h1 class="form-title">Create account</h1>
+            
+            <?php if(isset($error_message)): ?>
+                <div class="error-message"><?php echo $error_message; ?></div>
+            <?php endif; ?>
+            
+            <?php if(isset($success_message)): ?>
+                <div class="success-message"><?php echo $success_message; ?></div>
+            <?php endif; ?>
+            
+            <form action="register.php" method="POST">
+                <div class="form-group">
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Email address" required>
+                </div>
+                
+                <div class="form-group">
+                    <div class="password-container">
+                        <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+                        <button type="button" class="password-toggle" id="togglePassword">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="password-strength-container" id="passwordStrength">
+                        <div class="strength-meter">
+                            <div class="strength-meter-fill"></div>
+                        </div>
+                        <div class="strength-text"></div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="password-container">
+                        <input type="password" id="confirm_password" name="confirm_password" class="form-control" placeholder="Confirm Password" required>
+                        <button type="button" class="password-toggle" id="toggleConfirmPassword">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-btn">Create account</button>
+            </form>
+            
+            <div class="terms">
+                By creating an account you agree to Mapanao's<br>
+                <a href="#">Terms of Services</a> and <a href="#">Privacy Policy</a>.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle password visibility with eye icon
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        });
+        
+        document.getElementById('toggleConfirmPassword').addEventListener('click', function() {
+            const confirmPasswordInput = document.getElementById('confirm_password');
+            const toggleIcon = this.querySelector('i');
+            
+            if (confirmPasswordInput.type === 'password') {
+                confirmPasswordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                confirmPasswordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        });
+        
+        // Password strength indicator with bar
+        document.getElementById('password').addEventListener('input', function() {
+            const password = this.value;
+            const strengthContainer = document.getElementById('passwordStrength');
+            const strengthMeterFill = strengthContainer.querySelector('.strength-meter-fill');
+            const strengthText = strengthContainer.querySelector('.strength-text');
+            
+            // Remove previous strength classes
+            strengthContainer.classList.remove('strength-weak', 'strength-medium', 'strength-strong');
+            
+            if (password.length === 0) {
+                strengthText.textContent = '';
+                strengthMeterFill.style.width = '0';
+                return;
+            }
+            
+            // Check password strength
+            let strength = 0;
+            
+            // Length check
+            if (password.length >= 8) {
+                strength += 1;
+            }
+            
+            // Complexity checks
+            if (/[A-Z]/.test(password)) {
+                strength += 1;
+            }
+            
+            if (/[0-9]/.test(password)) {
+                strength += 1;
+            }
+            
+            if (/[^A-Za-z0-9]/.test(password)) {
+                strength += 1;
+            }
+            
+            // Set strength meter
+            if (strength <= 2) {
+                strengthContainer.classList.add('strength-weak');
+                strengthText.textContent = 'Weak password';
+            } else if (strength === 3) {
+                strengthContainer.classList.add('strength-medium');
+                strengthText.textContent = 'Good password';
+            } else {
+                strengthContainer.classList.add('strength-strong');
+                strengthText.textContent = 'Strong password';
+            }
+        });
+    </script>
+</body>
+</html>
