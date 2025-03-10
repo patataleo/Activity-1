@@ -1,4 +1,4 @@
-**Simple PHP Registration Form**
+# **Simple PHP Registration Form**
 
 > **Overview**
 
